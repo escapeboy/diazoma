@@ -16,7 +16,7 @@ describe('WellKnownAdapter on the level2 fixture', () => {
     it('loads the manifest and exposes brand, policy and capabilities', async () => {
         const a = await new WellKnownAdapter({ origin: site.origin }).ready();
         expect(a.policy).toBe('allow');
-        expect(a.brand).toMatchObject({ name: 'Botanical prints', accent: '#9b2335' });
+        expect(a.brand).toMatchObject({ name: 'Botanical prints', accent: '#e0556f' });
         expect(a.brand.logo).toBe(`${site.origin}/images/01.png`);
         expect(a.capabilities()).toEqual({
             search: true,

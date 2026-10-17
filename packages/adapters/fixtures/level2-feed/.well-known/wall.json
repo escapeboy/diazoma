@@ -3,7 +3,7 @@
   "policy": "allow",
   "name": "Botanical prints",
   "brand": {
-    "accent": "#9b2335",
+    "accent": "#e0556f",
     "logo": "/images/01.png"
   },
   "feeds": [

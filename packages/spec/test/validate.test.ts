@@ -5,7 +5,7 @@ import { promisify } from 'node:util';
 import path from 'node:path';
 import { validate, type Report } from '../src/validate';
 import { formatReport } from '../src/format';
-import { contrastOnWhite } from '../src/contrast';
+import { contrastOnWhite, contrastRatio } from '../src/contrast';
 import { fixtureDir, PACKAGE } from './helpers';
 // @ts-expect-error plain JS helper of the fixtures
 import { serveFixture } from '../../adapters/fixtures/lib/serve.mjs';
@@ -104,7 +104,7 @@ describe('broken fixture', () => {
         expect(cors.detail).toContain('missing');
         const contrast = check(r, 2, 'brand.accent');
         expect(contrast.status).toBe('fail');
-        expect(contrast.detail).toContain('1.59:1');
+        expect(contrast.detail).toContain('#4a1f2a on #1b1b1f is 1.24:1');
     });
     it('CLI: exit 1 and FAIL lines', async () => {
         const r = await cli('validate', broken.origin + '/');
@@ -268,5 +268,11 @@ describe('contrast', () => {
         expect(contrastOnWhite('#767676')!).toBeGreaterThanOrEqual(4.5);
         expect(contrastOnWhite('#777777')!).toBeLessThan(4.5);
         expect(contrastOnWhite('red')).toBeNull();
+    });
+    it('measures the accent against the wall background', () => {
+        expect(contrastRatio('#c9334f', '#0e0e10')!).toBeLessThan(4.5);
+        expect(contrastRatio('#e0556f', '#0e0e10')!).toBeGreaterThanOrEqual(4.5);
+        expect(contrastRatio('#0e0e10', '#e0556f')).toBeCloseTo(contrastRatio('#e0556f', '#0e0e10')!, 6);
+        expect(contrastRatio('red', '#000')).toBeNull();
     });
 });

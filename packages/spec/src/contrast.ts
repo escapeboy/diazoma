@@ -19,3 +19,16 @@ export function contrastOnWhite(color: string): number | null {
     const rgb = parseHex(color);
     return rgb ? 1.05 / (luminance(rgb) + 0.05) : null;
 }
+
+/** WCAG contrast ratio of two colours, or null when either cannot be parsed. */
+export function contrastRatio(a: string, b: string): number | null {
+    const x = parseHex(a);
+    const y = parseHex(b);
+    if (!x || !y) return null;
+    const [hi, lo] = [luminance(x), luminance(y)].sort((p, q) => q - p);
+    return (hi + 0.05) / (lo + 0.05);
+}
+
+/** The wall's background when the manifest names none, and its card surface (DEFAULT_BRAND in @diazoma/wall). */
+export const DEFAULT_WALL_BG = '#0e0e10';
+export const DEFAULT_WALL_SURFACE = '#1b1b1f';

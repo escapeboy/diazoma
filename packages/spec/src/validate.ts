@@ -1,5 +1,5 @@
 import { parseHTML } from 'linkedom';
-import { contrastOnWhite } from './contrast.js';
+import { contrastRatio, DEFAULT_WALL_BG, DEFAULT_WALL_SURFACE } from './contrast.js';
 import { describeErrors, validators } from './schemas.js';
 
 export type Status = 'pass' | 'fail' | 'warn' | 'info';
@@ -35,7 +35,7 @@ type Doc = ReturnType<typeof parseHTML>['document'];
 
 interface Manifest {
     policy?: string;
-    brand?: { accent?: string; logo?: string };
+    brand?: { accent?: string; logo?: string; bg?: string };
     feeds: { id: string; type?: string; url: string; title?: string }[];
     media?: { hosts?: string[] };
 }
@@ -161,9 +161,15 @@ async function checkManifest(level: LevelReport, f: typeof fetch, url: string, p
 
     const accent = m.brand?.accent;
     if (accent) {
-        const ratio = contrastOnWhite(accent);
-        if (ratio === null) level.checks.push({ name: 'brand.accent contrast', status: 'warn', detail: `${accent} is not #rgb or #rrggbb; not checked` });
-        else level.checks.push({ name: 'brand.accent contrast', status: ratio >= 4.5 ? 'pass' : 'fail', detail: `${accent} on white is ${ratio.toFixed(2)}:1 (needs 4.5:1)` });
+        // The wall draws the accent as text on its background and on its card surface (and adjusts it when it does not
+        // read); filled buttons use a darker shade that the wall works out itself.
+        const bg = typeof m.brand?.bg === 'string' && m.brand.bg ? m.brand.bg : DEFAULT_WALL_BG;
+        const measured = [bg, DEFAULT_WALL_SURFACE].map((back) => ({ back, ratio: contrastRatio(accent, back) }));
+        if (measured.some((x) => x.ratio === null)) level.checks.push({ name: 'brand.accent contrast', status: 'warn', detail: `${accent} or ${bg} is not #rgb or #rrggbb; not checked` });
+        else {
+            const worst = measured.reduce((a, b) => (b.ratio! < a.ratio! ? b : a));
+            level.checks.push({ name: 'brand.accent contrast', status: worst.ratio! >= 4.5 ? 'pass' : 'fail', detail: `${accent} on ${worst.back} is ${worst.ratio!.toFixed(2)}:1 (needs 4.5:1)` });
+        }
     }
 }
 

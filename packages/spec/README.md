@@ -19,7 +19,7 @@ npx @diazoma/spec validate https://example.com --json
 It detects the level (3, 2, 1, in the order of the spec), validates the manifest and one page of
 each non-search feed, requests one image from each `media.hosts` host with an `Origin` header and
 requires `Access-Control-Allow-Origin` to be `*` or that origin, checks that `brand.accent` has at
-least 4.5:1 contrast against white, prints `policy`, and prints the ladder with pass or fail per
+least 4.5:1 contrast against `brand.bg` (default `#0e0e10`) and the card surface (`#1b1b1f`), prints `policy`, and prints the ladder with pass or fail per
 level and per check. Exit code 0 when the highest detected level passes, 1 when it fails or nothing
 is detected, 2 on bad usage.
 
