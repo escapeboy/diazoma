@@ -1,0 +1,23 @@
+{
+  "id": "api.prints.example",
+  "version": 1,
+  "match": ["https://prints.example/*"],
+  "api": {
+    "source": "api",
+    "url": "https://prints.example/api/plates?page={page}&per=50",
+    "page": { "start": 1, "param": "page" },
+    "items": "$.data[*]",
+    "fields": {
+      "id": "$.id",
+      "link": "$.url",
+      "image": "$.images[0].large",
+      "title": "$.title",
+      "aspect": "$.images[0].ratio",
+      "meta.price": "$.price"
+    }
+  },
+  "media": { "needsPrivilegedFetch": false },
+  "fixtures": ["botanical-api/page1.json"],
+  "license": "CC0-1.0",
+  "tags": ["listings", "prints"]
+}

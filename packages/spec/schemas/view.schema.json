@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://diazoma.app/spec/v1/view.schema.json",
+  "title": "Diazoma view v1",
+  "description": "How a site wants its wall to look: action buttons, the info panel, the layout, the colours and the texts. Lives in the manifest, a recipe, a page's data-wall-view script, or new Wall({ view }). The wall clamps values outside these limits and warns. Unknown fields are allowed.",
+  "type": "object",
+  "properties": {
+    "actions": {
+      "type": "object",
+      "description": "Display of the actions, by action id. How an action is sent is in the manifest's actions.",
+      "additionalProperties": { "$ref": "#/$defs/actionView" }
+    },
+    "panel": {
+      "type": "object",
+      "properties": {
+        "fields": {
+          "type": "array",
+          "maxItems": 8,
+          "items": { "$ref": "#/$defs/panelField" },
+          "description": "Lines of the info panel, in order."
+        },
+        "side": {
+          "type": "array",
+          "items": { "enum": ["creator", "collection", "tags"] },
+          "description": "Which links the column left of the picture shows."
+        },
+        "metaLabels": {
+          "type": "object",
+          "additionalProperties": { "type": "string", "maxLength": 24 },
+          "description": "Labels for the keys of item.meta."
+        }
+      }
+    },
+    "wall": {
+      "type": "object",
+      "properties": {
+        "rows": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "radius": { "type": "number", "minimum": 1.8, "maximum": 4.0, "description": "Metres." },
+        "arc": { "type": "number", "minimum": 60, "maximum": 150, "description": "Degrees." },
+        "card": {
+          "type": "object",
+          "properties": {
+            "width": { "type": "number", "minimum": 0.25, "maximum": 0.6, "description": "Metres." },
+            "height": { "type": "number", "minimum": 0.25, "maximum": 0.7, "description": "Metres." }
+          }
+        },
+        "label": { "enum": ["hover", "none"], "description": "The label shown on the focused card." },
+        "labelFields": {
+          "type": "array",
+          "maxItems": 3,
+          "items": { "$ref": "#/$defs/labelField" }
+        },
+        "badges": { "type": "boolean", "description": "Draw item.badges[0] on cards without a media badge." },
+        "indicator": { "type": ["string", "null"], "description": "Which action's state draws the corner mark; null for none." }
+      }
+    },
+    "theme": {
+      "type": "object",
+      "properties": {
+        "colors": {
+          "type": "object",
+          "properties": {
+            "bg": { "$ref": "#/$defs/hex" },
+            "surface": { "$ref": "#/$defs/hex" },
+            "surfaceHi": { "$ref": "#/$defs/hex" },
+            "text": { "$ref": "#/$defs/hex" },
+            "textSoft": { "$ref": "#/$defs/hex" },
+            "muted": { "$ref": "#/$defs/hex" },
+            "accent": { "$ref": "#/$defs/hex" },
+            "accentStrong": { "$ref": "#/$defs/hex" },
+            "accentText": { "$ref": "#/$defs/hex" },
+            "panel": {
+              "anyOf": [
+                { "$ref": "#/$defs/hex" },
+                { "type": "string", "pattern": "^rgba\\(\\s*\\d{1,3}\\s*,\\s*\\d{1,3}\\s*,\\s*\\d{1,3}\\s*,\\s*(0|1|0?\\.\\d+|1\\.0+)\\s*\\)$" }
+              ],
+              "description": "Background of the info panel, hints, labels and notices: hex or rgba(r, g, b, a)."
+            }
+          }
+        },
+        "font": { "type": "string" },
+        "environment": {
+          "type": "object",
+          "properties": {
+            "preset": { "enum": ["studio", "night", "plain"] },
+            "top": { "$ref": "#/$defs/hex" },
+            "horizon": { "$ref": "#/$defs/hex" },
+            "bottom": { "$ref": "#/$defs/hex" },
+            "floor": { "$ref": "#/$defs/hex" },
+            "stars": { "type": "boolean" },
+            "panorama": { "type": "string", "description": "Equirectangular image around the viewer. The adapters keep only an http(s) URL." },
+            "dim": { "type": "number", "minimum": 0, "maximum": 0.8, "description": "How much the panorama is darkened." }
+          }
+        }
+      }
+    },
+    "strings": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Texts of the wall by key; they win over the built-in ones."
+    }
+  },
+  "$defs": {
+    "hex": { "type": "string", "pattern": "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$" },
+    "metaKey": { "type": "string", "pattern": "^meta\\.[^.]+$" },
+    "panelField": {
+      "anyOf": [
+        { "enum": ["title", "subtitle", "creator", "collection", "description", "likes", "tags", "badges", "meta"] },
+        { "$ref": "#/$defs/metaKey" }
+      ]
+    },
+    "labelField": {
+      "anyOf": [
+        { "enum": ["title", "subtitle", "creator", "count"] },
+        { "$ref": "#/$defs/metaKey" }
+      ]
+    },
+    "actionView": {
+      "type": "object",
+      "properties": {
+        "label": { "type": "string", "maxLength": 24 },
+        "labelActive": { "type": "string", "maxLength": 24, "description": "Label while the action's state is on." },
+        "icon": { "type": "string", "maxLength": 4, "description": "One or two characters." },
+        "iconActive": { "type": "string", "maxLength": 4 },
+        "placement": { "enum": ["primary", "more", "hidden"], "description": "primary: in the column (at most 3); more: behind More; hidden: no button." },
+        "order": { "type": "number" },
+        "style": { "enum": ["primary", "secondary"] },
+        "confirm": { "type": "boolean", "description": "Ask for a second press. Always on for actions that open a page." },
+        "state": { "type": "string", "description": "Key in item.state that says the action is on." },
+        "count": { "type": "string", "description": "Item field or item.state key with a number shown after the label." }
+      }
+    }
+  }
+}

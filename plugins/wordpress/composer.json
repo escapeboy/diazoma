@@ -1,0 +1,30 @@
+{
+    "name": "diazoma/wp-diazoma-wall",
+    "description": "WordPress plugin that exposes a Diazoma wall feed, manifest and optional /xr embed page.",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "php": ">=8.1"
+    },
+    "require-dev": {
+        "brain/monkey": "^2.7",
+        "opis/json-schema": "^2.6",
+        "phpunit/phpunit": "^12"
+    },
+    "autoload": {
+        "psr-4": {
+            "Diazoma\\Wall\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Diazoma\\Wall\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit --configuration phpunit.xml.dist"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

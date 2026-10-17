@@ -1,0 +1,7 @@
+{
+  "data": [
+    { "id": 101, "url": "/plates/101", "title": "Heather sprig", "price": "11 EUR", "images": [{ "large": "https://prints.example/i/101-480.png", "ratio": 0.8 }] },
+    { "id": 102, "url": "/plates/102", "title": "Bluebell row", "price": "13 EUR", "images": [{ "large": "https://prints.example/i/102-480.png", "ratio": 1.5 }] },
+    { "id": 103, "url": "/plates/103", "title": "Sage leaf", "price": "8 EUR", "images": [{ "large": "https://prints.example/i/103-480.png", "ratio": 1 }] }
+  ]
+}

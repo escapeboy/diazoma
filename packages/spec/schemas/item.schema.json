@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://diazoma.app/spec/v1/item.schema.json",
+  "title": "Diazoma item v1",
+  "description": "One card on the wall. An item needs id and link, and either an image with its aspect or a title (a text card). Everything else is optional and unknown fields are ignored.",
+  "type": "object",
+  "required": ["id", "link"],
+  "dependentRequired": { "image": ["aspect"] },
+  "anyOf": [
+    { "required": ["image"], "properties": { "image": true } },
+    { "required": ["title"], "properties": { "title": { "type": "string", "pattern": "\\S" } } }
+  ],
+  "properties": {
+    "id": { "type": "string", "minLength": 1, "description": "Stable id, unique in the feed." },
+    "link": { "type": "string", "minLength": 1, "description": "Page of the item on the site. Absolute, or relative to the feed URL." },
+    "image": { "type": "string", "minLength": 1, "description": "Thumbnail URL (about 512 px wide). Absent on a text card." },
+    "aspect": { "type": "number", "exclusiveMinimum": 0, "description": "Width divided by height of the image. Required with image; a text card may omit it (the wall draws it portrait, 0.75)." },
+    "title": { "type": "string" },
+    "subtitle": { "type": "string" },
+    "image_focus": { "type": "string", "description": "Larger image (about 1024 px) for the focused card." },
+    "image_full": { "type": "string", "description": "Full-size image (about 2560 px) for the viewer." },
+    "video": { "type": "string", "description": "Video URL: mp4/webm, HLS .m3u8 or DASH .mpd. The default and fallback source." },
+    "video_type": { "enum": ["file", "hls", "dash"], "description": "Kind of the video URL. Absent: .m3u8 means hls, .mpd means dash, anything else file." },
+    "video_sources": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "required": ["src"],
+        "properties": {
+          "src": { "type": "string", "minLength": 1, "description": "Rendition URL. Absolute, or relative to the feed URL." },
+          "type": { "enum": ["file", "hls", "dash"] },
+          "height": { "type": "integer", "exclusiveMinimum": 0, "description": "Pixel height of the rendition." },
+          "codecs": { "type": "string", "description": "Codecs string, for example avc1.640028 or av01.0.08M.08." },
+          "bitrate": { "type": "integer", "exclusiveMinimum": 0, "description": "Bits per second." }
+        }
+      },
+      "description": "Up to 8 alternative renditions. When video is absent, the first source becomes video."
+    },
+    "duration": { "type": "number", "minimum": 0, "description": "Length of the video in seconds, shown on the card." },
+    "projection": { "enum": ["flat", "equirect180", "equirect360"], "description": "Video projection; absent means flat." },
+    "stereo": { "enum": ["mono", "sbs", "tb"], "description": "Stereo layout of the video; absent means mono." },
+    "badges": { "type": "array", "items": { "type": "string" }, "description": "Short labels drawn on the card." },
+    "blurhash": { "type": "string", "description": "Placeholder while the texture loads." },
+    "meta": { "type": "object", "additionalProperties": { "type": "string" }, "description": "Free key/value pairs shown in the viewer's context column, in order." },
+    "kind": { "enum": ["item", "collection", "tag"], "description": "What the card is; absent means item." },
+    "media_type": { "enum": ["photo", "gif", "video"], "description": "What the item shows. Absent with video set: video." },
+    "unplayable": {
+      "type": "object",
+      "required": ["provider"],
+      "properties": {
+        "provider": { "type": "string" },
+        "embed": { "type": "string", "minLength": 1, "description": "Embed page URL. Honoured only on https://www.youtube-nocookie.com/embed/<id>, https://www.youtube.com/embed/<id> and https://player.vimeo.com/video/<id>." }
+      },
+      "description": "Set when the video is an embed that cannot play in WebGL; names the provider and may give the embed URL."
+    },
+    "creator": {
+      "type": "object",
+      "required": ["id", "label"],
+      "properties": { "id": { "type": "string" }, "label": { "type": "string" } },
+      "description": "Who made the item."
+    },
+    "collection": {
+      "type": "object",
+      "required": ["id", "label"],
+      "properties": { "id": { "type": "string" }, "label": { "type": "string" }, "following": { "type": "boolean" } },
+      "description": "The set the item belongs to."
+    },
+    "tags": { "type": "array", "items": { "type": "string" }, "description": "Tags of the item." },
+    "count": { "type": "integer", "minimum": 0, "description": "Number of items inside a collection or tag card." },
+    "width": { "type": "integer", "minimum": 1, "description": "Pixel width of the original image." },
+    "height": { "type": "integer", "minimum": 1, "description": "Pixel height of the original image." },
+    "actions": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Ids of the actions that apply to this item. Absent: all the feed's actions. An empty list: none."
+    },
+    "state": {
+      "type": "object",
+      "properties": { "liked": { "type": "boolean" } },
+      "additionalProperties": { "type": ["boolean", "number", "string"] },
+      "description": "The viewer's state for this item, by key. liked is the state of the like action."
+    },
+    "likes": { "type": "integer", "minimum": 0, "description": "Like count." },
+    "description": { "type": "string", "description": "Longer text shown in the viewer." },
+    "tag": { "type": "string", "description": "Tag name on a tag card." },
+    "excerpt": { "type": "string", "maxLength": 500, "description": "Plain text of up to 500 characters, drawn on a text card under the title; the viewer shows it when description is absent." },
+    "date": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}([Tt ]\\d{2}:\\d{2}(:\\d{2}(\\.\\d+)?)?([Zz]|[+-]\\d{2}:?\\d{2})?)?$", "description": "ISO 8601 date or date-time, drawn small on the card as a short local date." },
+    "accent": { "type": "string", "pattern": "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$", "description": "Colour of the text card's top band, #rgb or #rrggbb. Default: the site's brand accent." }
+  }
+}

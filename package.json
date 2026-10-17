@@ -1,0 +1,14 @@
+{
+  "name": "diazoma",
+  "private": true,
+  "description": "Diazoma: browse any list on the web as a wall. The open-source packages (wall, adapters, spec) and plugins.",
+  "license": "SEE LICENSE IN LICENSING.md",
+  "scripts": {
+    "build": "pnpm -r build",
+    "test": "pnpm -r test"
+  },
+  "packageManager": "pnpm@10.33.2",
+  "engines": {
+    "node": ">=22"
+  }
+}

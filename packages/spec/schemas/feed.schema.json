@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://diazoma.app/spec/v1/feed.schema.json",
+  "title": "Diazoma feed page v1",
+  "description": "One page of a feed. 50 items are recommended, at most 100 are allowed.",
+  "type": "object",
+  "required": ["items"],
+  "properties": {
+    "items": { "type": "array", "maxItems": 100, "items": { "$ref": "item.schema.json" } },
+    "next": { "type": "string", "description": "Opaque cursor for the next page; absent or empty on the last page. Passed back verbatim as cursor=<next>." }
+  }
+}

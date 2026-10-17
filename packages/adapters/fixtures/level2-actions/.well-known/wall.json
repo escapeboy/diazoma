@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "policy": "allow",
+  "name": "Fixture shop",
+  "brand": { "accent": "#2f6fde" },
+  "feeds": [
+    { "id": "latest", "title": "Latest", "url": "/wall/feed", "cursor": true }
+  ],
+  "media": { "hosts": ["{{CDN_HOST}}"] },
+  "actions": {
+    "favourite": { "method": "POST", "url": "/api/items/{id}/favourite", "auth": "session", "toggle": true },
+    "cart": { "mode": "deeplink", "url": "/cart/add/{id}" },
+    "compare": { "method": "POST", "url": "/api/items/{id}/compare", "auth": "session" },
+    "enquire": { "method": "POST", "url": "/api/items/{id}/enquire", "auth": "session" },
+    "follow": { "method": "POST", "url": "/api/items/{id}/follow", "auth": "session", "toggle": true }
+  },
+  "auth": {
+    "login": "/login",
+    "csrf": { "meta": "csrf-token", "header": "X-CSRF-Token" }
+  },
+  "view": {
+    "actions": {
+      "cart": { "label": "Add to cart", "icon": "🛒", "placement": "primary", "style": "primary", "order": 0 },
+      "favourite": { "label": "Favourite", "labelActive": "Favourited", "icon": "☆", "iconActive": "★", "placement": "primary", "order": 1 },
+      "compare": { "label": "Compare", "order": 2 },
+      "enquire": { "label": "Ask about it", "order": 3 }
+    },
+    "panel": {
+      "fields": ["title", "meta.price", "subtitle", "badges", "description"],
+      "side": [],
+      "metaLabels": { "price": "Price" }
+    },
+    "wall": {
+      "rows": 4,
+      "radius": 3,
+      "arc": 110,
+      "card": { "width": 0.3, "height": 0.3 },
+      "labelFields": ["title", "meta.price"],
+      "indicator": "favourite"
+    },
+    "theme": {
+      "colors": { "accent": "#5b8def", "accentStrong": "#1f4fae", "panel": "rgba(10,20,40,0.85)" },
+      "environment": { "preset": "plain", "top": "#101a2e", "horizon": "#1d2b4a", "bottom": "#05070d" }
+    },
+    "strings": { "signin_on_site": "Sign in to the shop first" }
+  }
+}

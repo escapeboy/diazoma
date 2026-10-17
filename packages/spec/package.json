@@ -1,0 +1,58 @@
+{
+  "name": "@diazoma/spec",
+  "version": "0.1.0",
+  "description": "The open Diazoma site-compatibility spec v1: markdown, JSON Schemas, and the validator CLI.",
+  "license": "(CC-BY-4.0 AND Apache-2.0)",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "diazoma-spec": "./dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./schemas/*": "./schemas/*",
+    "./spec/v1.md": "./spec/v1.md"
+  },
+  "files": [
+    "dist",
+    "schemas",
+    "spec",
+    "LICENSE",
+    "LICENSE-text",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "tsc -p tsconfig.build.json && vitest run",
+    "validate": "node dist/cli.js validate"
+  },
+  "dependencies": {
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
+    "linkedom": "^0.18.13"
+  },
+  "devDependencies": {
+    "@diazoma/recipe-schema": "workspace:*",
+    "@types/node": "^24.0.0",
+    "typescript": "^6.0.3",
+    "vitest": "^5.0.3"
+  },
+  "homepage": "https://diazoma.app/docs/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/escapeboy/diazoma.git",
+    "directory": "packages/spec"
+  },
+  "bugs": {
+    "url": "https://github.com/escapeboy/diazoma/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Botanical notes</title>
+    <link>https://notes.example/</link>
+    <atom:link rel="next" href="/feed.xml?page=2"/>
+    <item>
+      <title>Enclosure image</title>
+      <link>https://notes.example/a</link>
+      <guid>a</guid>
+      <dc:creator>Ana</dc:creator>
+      <enclosure url="https://notes.example/a.jpg" type="image/jpeg" length="1"/>
+      <media:content url="https://notes.example/ignored.jpg" medium="image" width="800" height="400"/>
+    </item>
+    <item>
+      <title>Media content with size</title>
+      <link>https://notes.example/b</link>
+      <guid>b</guid>
+      <media:content url="https://notes.example/b.jpg" medium="image" width="800" height="400"/>
+    </item>
+    <item>
+      <title>Media thumbnail</title>
+      <link>https://notes.example/c</link>
+      <guid>c</guid>
+      <media:thumbnail url="https://notes.example/c.jpg" width="300" height="400"/>
+    </item>
+    <item>
+      <title>Image in the description</title>
+      <link>https://notes.example/d</link>
+      <guid>d</guid>
+      <description><![CDATA[<p>Text <img src="/d.jpg" width="200" height="100"> more</p>]]></description>
+    </item>
+    <item>
+      <title>A video enclosure and no image</title>
+      <link>https://notes.example/e</link>
+      <guid>e</guid>
+      <enclosure url="https://notes.example/e.mp4" type="video/mp4" length="1"/>
+    </item>
+    <item>
+      <title>Image without a size</title>
+      <link>https://notes.example/f</link>
+      <guid>f</guid>
+      <description>&lt;img src="https://notes.example/f.jpg"&gt;</description>
+    </item>
+    <item>
+      <link>https://notes.example/g</link>
+      <guid>g</guid>
+      <description>No picture and no title: nothing to draw.</description>
+    </item>
+  </channel>
+</rss>

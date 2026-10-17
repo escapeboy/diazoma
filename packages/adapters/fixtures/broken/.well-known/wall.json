@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "name": "Broken prints",
+  "brand": {
+    "accent": "#f2c94c"
+  },
+  "feeds": [
+    {
+      "id": "latest",
+      "url": "/wall/feed.json"
+    }
+  ],
+  "media": {
+    "hosts": [
+      "{{CDN_HOST}}"
+    ]
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "name": "@diazoma/wall",
+  "version": "0.1.0",
+  "description": "A curved, searchable wall of items for WebXR headsets, with a magic window on desktop and phone.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/wall.esm.js",
+  "module": "./dist/wall.esm.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/wall.esm.js",
+      "default": "./dist/wall.esm.js"
+    },
+    "./iife": "./dist/wall.iife.js",
+    "./loader": "./dist/loader.js"
+  },
+  "files": [
+    "dist",
+    "QA.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "pnpm build:esm && pnpm build:iife && pnpm build:libs && pnpm build:loader && pnpm build:types",
+    "build:esm": "vite build --config vite.esm.config.ts",
+    "build:iife": "vite build --config vite.iife.config.ts",
+    "build:libs": "vite build --config vite.libs.config.ts --mode hls && vite build --config vite.libs.config.ts --mode dash",
+    "build:loader": "vite build --config vite.loader.config.ts",
+    "build:types": "tsc -p tsconfig.types.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "harness": "node harness/run.mjs"
+  },
+  "peerDependencies": {
+    "three": "~0.186.1",
+    "qrcode": "1.5.4",
+    "hls.js": "^1.7.3",
+    "dashjs": "^5.2.1"
+  },
+  "peerDependenciesMeta": {
+    "qrcode": {
+      "optional": true
+    },
+    "hls.js": {
+      "optional": true
+    },
+    "dashjs": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/three": "0.186.0",
+    "dashjs": "5.2.1",
+    "hls.js": "1.7.3",
+    "iwer": "^2.5.0",
+    "puppeteer-core": "^25.13.0",
+    "qrcode": "1.5.4",
+    "three": "~0.186.1",
+    "typescript": "^6.0.3",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.3"
+  },
+  "homepage": "https://diazoma.app/docs/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/escapeboy/diazoma.git",
+    "directory": "packages/wall"
+  },
+  "bugs": {
+    "url": "https://github.com/escapeboy/diazoma/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "policy": "allow",
+  "name": "Botanical prints",
+  "brand": {
+    "accent": "#9b2335",
+    "logo": "/images/01.png"
+  },
+  "feeds": [
+    {
+      "id": "latest",
+      "title": "Latest",
+      "url": "/wall/feed.json",
+      "cursor": true
+    },
+    {
+      "id": "popular",
+      "title": "Popular",
+      "url": "/wall/popular.json"
+    },
+    {
+      "id": "search",
+      "type": "search",
+      "url": "/wall/search.json?q={query}"
+    }
+  ],
+  "filters": [
+    {
+      "id": "kind",
+      "title": "Kind",
+      "values": [
+        "all",
+        "leaf",
+        "flower"
+      ],
+      "param": "kind"
+    }
+  ],
+  "media": {
+    "hosts": [
+      "{{CDN_HOST}}"
+    ],
+    "variants": {
+      "thumb": 192,
+      "focus": 480
+    },
+    "projections": [
+      "flat"
+    ]
+  },
+  "actions": {
+    "like": {
+      "method": "POST",
+      "url": "/api/items/{id}/like",
+      "auth": "session",
+      "toggle": true
+    },
+    "cart": {
+      "mode": "deeplink",
+      "url": "/cart/add/{id}"
+    }
+  }
+}

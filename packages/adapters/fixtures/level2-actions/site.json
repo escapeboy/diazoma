@@ -1,0 +1,20 @@
+{
+  "name": "level2-actions",
+  "path": "/xr.html",
+  "hook": "__diazoma",
+  "eventsPath": "/api/events",
+  "feedPath": "/wall/feed",
+  "features": ["actions"],
+  "feed": {
+    "cursorParam": "cursor",
+    "nextKey": "next",
+    "itemsKey": "items"
+  },
+  "selectors": {
+    "introRoot": "#diazoma-intro",
+    "introCard": "#diazoma-intro-card",
+    "enter": "#diazoma-enter",
+    "browse": "#diazoma-browse",
+    "stage": "#diazoma"
+  }
+}

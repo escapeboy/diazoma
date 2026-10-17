@@ -1,0 +1,109 @@
+{
+  "items": [
+    {
+      "id": "print-001",
+      "link": "/print/print-001",
+      "title": "Fern frond",
+      "subtitle": "Plate 1",
+      "image": "{{CDN_ORIGIN}}/images/01.png",
+      "image_focus": "{{CDN_ORIGIN}}/images/01-large.png",
+      "aspect": 0.75,
+      "badges": [
+        "new"
+      ],
+      "media_type": "photo",
+      "width": 192,
+      "height": 256,
+      "tags": [
+        "botanical",
+        "flower"
+      ],
+      "likes": 0
+    },
+    {
+      "id": "print-002",
+      "link": "/print/print-002",
+      "title": "Ginkgo leaf",
+      "subtitle": "Plate 2",
+      "image": "{{CDN_ORIGIN}}/images/02.png",
+      "image_focus": "{{CDN_ORIGIN}}/images/02-large.png",
+      "aspect": 1,
+      "media_type": "photo",
+      "width": 192,
+      "height": 192,
+      "tags": [
+        "botanical",
+        "leaf"
+      ],
+      "likes": 1
+    },
+    {
+      "id": "print-003",
+      "link": "/print/print-003",
+      "title": "Oak branch",
+      "subtitle": "Plate 3",
+      "image": "{{CDN_ORIGIN}}/images/03.png",
+      "image_focus": "{{CDN_ORIGIN}}/images/03-large.png",
+      "aspect": 1.33,
+      "media_type": "photo",
+      "width": 192,
+      "height": 144,
+      "tags": [
+        "botanical",
+        "flower"
+      ],
+      "likes": 2
+    },
+    {
+      "id": "print-004",
+      "link": "/print/print-004",
+      "title": "Maple seeds",
+      "subtitle": "Plate 4",
+      "image": "{{CDN_ORIGIN}}/images/04.png",
+      "image_focus": "{{CDN_ORIGIN}}/images/04-large.png",
+      "aspect": 0.8,
+      "media_type": "photo",
+      "width": 192,
+      "height": 240,
+      "tags": [
+        "botanical",
+        "leaf"
+      ],
+      "likes": 3
+    },
+    {
+      "id": "print-005",
+      "link": "/print/print-005",
+      "title": "Lavender stem",
+      "subtitle": "Plate 5",
+      "image": "{{CDN_ORIGIN}}/images/05.png",
+      "image_focus": "{{CDN_ORIGIN}}/images/05-large.png",
+      "aspect": 1.5,
+      "media_type": "photo",
+      "width": 192,
+      "height": 128,
+      "tags": [
+        "botanical",
+        "flower"
+      ],
+      "likes": 4
+    },
+    {
+      "id": "print-006",
+      "link": "/print/print-006",
+      "title": "Poppy bud",
+      "subtitle": "Plate 6",
+      "image": "{{CDN_ORIGIN}}/images/06.png",
+      "image_focus": "{{CDN_ORIGIN}}/images/06-large.png",
+      "aspect": 0.62,
+      "media_type": "photo",
+      "width": 192,
+      "height": 310,
+      "tags": [
+        "botanical",
+        "leaf"
+      ],
+      "likes": 5
+    }
+  ]
+}

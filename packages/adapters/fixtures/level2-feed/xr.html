@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Botanical prints</title>
+<link rel="wall-manifest" href="/.well-known/wall.json">
+</head>
+<body>
+<h1>Botanical prints</h1>
+<p>A shop of printed plates. The wall reads <a href="/.well-known/wall.json">its manifest</a>.</p>
+<div id="diazoma"></div>
+<style>#diazoma { position: fixed; inset: 0; } #diazoma canvas { display: block; }</style>
+<script src="/adapters.iife.js"></script>
+<script>
+  (async () => {
+    const adapter = await new DiazomaAdapters.WellKnownAdapter({ origin: location.origin }).ready();
+    window.diazoma = { options: { adapter, brand: adapter.brand } };
+    const s = document.createElement('script');
+    s.src = '/bundle/loader.js';
+    s.setAttribute('data-core', '/bundle/wall.iife.js');
+    s.setAttribute('data-mount', '#diazoma');
+    s.setAttribute('data-title', 'Step inside the prints');
+    s.setAttribute('data-body', 'Botanical prints, all around you in VR.');
+    document.body.appendChild(s);
+  })();
+</script>
+</body>
+</html>

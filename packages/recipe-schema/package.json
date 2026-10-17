@@ -1,0 +1,38 @@
+{
+  "name": "@diazoma/recipe-schema",
+  "version": "0.1.0",
+  "description": "JSON Schema (2020-12) for Diazoma site recipes: declarative extraction of a wall from a site's DOM or JSON API.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": "./recipe.schema.json",
+    "./recipe.schema.json": "./recipe.schema.json",
+    "./view.schema.json": "./view.schema.json"
+  },
+  "files": [
+    "recipe.schema.json",
+    "view.schema.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "ajv": "^8.20.0",
+    "vitest": "^5.0.3"
+  },
+  "homepage": "https://diazoma.app/docs/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/escapeboy/diazoma.git",
+    "directory": "packages/recipe-schema"
+  },
+  "bugs": {
+    "url": "https://github.com/escapeboy/diazoma/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}

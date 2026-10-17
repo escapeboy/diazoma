@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="csrf-token" content="fixture-token">
+<title>Fixture shop</title>
+<link rel="wall-manifest" href="/.well-known/wall.json">
+</head>
+<body>
+<h1>Fixture shop</h1>
+<p>A shop whose manifest declares its own actions and view (<a href="/.well-known/wall.json">manifest</a>).</p>
+<div id="diazoma"></div>
+<style>#diazoma { position: fixed; inset: 0; } #diazoma canvas { display: block; }</style>
+<script src="/adapters.iife.js"></script>
+<script>
+  // The visitor's session on the shop; session actions must carry it.
+  document.cookie = 'shop_session=fixture-session; path=/';
+  (async () => {
+    const adapter = await new DiazomaAdapters.WellKnownAdapter({ origin: location.origin }).ready();
+    window.diazoma = { options: { adapter, brand: adapter.brand } };
+    const s = document.createElement('script');
+    s.src = '/bundle/loader.js';
+    s.setAttribute('data-core', '/bundle/wall.iife.js');
+    s.setAttribute('data-mount', '#diazoma');
+    s.setAttribute('data-title', 'Step into the shop');
+    s.setAttribute('data-body', 'The shop, all around you in VR.');
+    document.body.appendChild(s);
+  })();
+</script>
+</body>
+</html>

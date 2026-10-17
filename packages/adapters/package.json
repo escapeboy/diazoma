@@ -1,0 +1,63 @@
+{
+  "name": "@diazoma/adapters",
+  "version": "0.1.0",
+  "description": "Feed adapters for the Diazoma wall: DOM annotations, JSON feed, .well-known manifest, RSS/Atom and recipes. They fetch and parse; they never render.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "diazoma-recipe": "./dist/node/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./node": {
+      "types": "./dist/node/index.d.ts",
+      "default": "./dist/node/index.js"
+    },
+    "./iife": "./dist/adapters.iife.js",
+    "./embed": "./dist/diazoma-embed.js"
+  },
+  "files": [
+    "dist",
+    "fixtures/recipes",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json && vite build --config vite.iife.config.ts && vite build --config vite.embed.config.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@diazoma/recipe-schema": "workspace:*",
+    "ajv": "^8.20.0",
+    "json-p3": "^3.0.0",
+    "linkedom": "^0.18.13"
+  },
+  "devDependencies": {
+    "@diazoma/wall": "workspace:*",
+    "@types/node": "^24.0.0",
+    "typescript": "^6.0.3",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.3"
+  },
+  "homepage": "https://diazoma.app/docs/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/escapeboy/diazoma.git",
+    "directory": "packages/adapters"
+  },
+  "bugs": {
+    "url": "https://github.com/escapeboy/diazoma/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://diazoma.app/spec/v1/manifest.schema.json",
+  "title": "Diazoma manifest v1 (.well-known/wall.json)",
+  "type": "object",
+  "required": ["version", "feeds"],
+  "properties": {
+    "version": { "const": 1 },
+    "policy": { "enum": ["allow", "deny", "recipes-only"], "default": "allow" },
+    "name": { "type": "string" },
+    "brand": {
+      "type": "object",
+      "properties": {
+        "accent": { "type": "string" },
+        "logo": { "type": "string" },
+        "bg": { "type": "string" }
+      }
+    },
+    "feeds": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "url"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "title": { "type": "string" },
+          "type": { "enum": ["feed", "search"], "default": "feed" },
+          "url": { "type": "string", "minLength": 1 },
+          "cursor": { "type": "boolean", "description": "True when the feed pages with cursor=<next>." }
+        },
+        "if": { "properties": { "type": { "const": "search" } }, "required": ["type"] },
+        "then": { "properties": { "url": { "type": "string", "pattern": "\\{query\\}" } } }
+      },
+      "description": "A feed with type search takes the query in {query}."
+    },
+    "filters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "values", "param"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "values": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "param": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "media": {
+      "type": "object",
+      "properties": {
+        "hosts": { "type": "array", "items": { "type": "string", "minLength": 1 }, "description": "Hosts that serve images and video with Access-Control-Allow-Origin: * (or the requesting origin)." },
+        "variants": {
+          "type": "object",
+          "properties": {
+            "thumb": { "type": "integer", "minimum": 1 },
+            "focus": { "type": "integer", "minimum": 1 },
+            "full": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "projections": { "type": "array", "items": { "enum": ["flat", "equirect180", "equirect360"] } },
+        "resize": {
+          "type": "array",
+          "maxItems": 20,
+          "description": "Rules that turn an image URL into smaller copies (spec 3.5).",
+          "items": {
+            "type": "object",
+            "required": ["match"],
+            "properties": {
+              "match": { "type": "string", "minLength": 1, "maxLength": 200, "description": "Plain text the absolute image URL contains (not a regular expression)." },
+              "image": { "type": "string", "description": "The card (about 512 px): replaces the first match, or a template with {url}." },
+              "image_focus": { "type": "string", "description": "The focused card (about 1024 px): replaces the first match, or a template with {url}." },
+              "image_full": { "type": "string", "description": "What the viewer opens: replaces the first match, or a template with {url}." }
+            },
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    "actions": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "method": { "enum": ["GET", "POST", "PUT", "PATCH", "DELETE"] },
+          "url": { "type": "string" },
+          "auth": { "enum": ["none", "session", "bearer"] },
+          "toggle": { "type": "boolean" },
+          "response": { "enum": ["json", "empty"], "description": "json (default): a 2xx answer is a JSON object. empty: a 2xx answer without a body." },
+          "mode": { "const": "deeplink" }
+        },
+        "oneOf": [
+          { "required": ["method", "url"], "properties": { "method": {}, "url": {} } },
+          { "required": ["mode", "url"], "properties": { "mode": {}, "url": {} } }
+        ]
+      }
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "login": { "type": "string" },
+        "device_link": { "type": "string" },
+        "csrf": {
+          "type": "object",
+          "required": ["header"],
+          "properties": {
+            "meta": { "type": "string", "minLength": 1, "description": "Name of a <meta> tag in the site's own page that holds the token." },
+            "cookie": { "type": "string", "minLength": 1, "description": "Name of a cookie that holds the token (double submit)." },
+            "header": { "type": "string", "pattern": "^[A-Za-z0-9-]{1,64}$", "description": "Request header that carries the token." }
+          },
+          "anyOf": [
+            { "required": ["meta"], "properties": { "meta": {} } },
+            { "required": ["cookie"], "properties": { "cookie": {} } }
+          ],
+          "description": "How a session action proves it comes from the site's page. Needs meta or cookie."
+        }
+      }
+    },
+    "recipe": { "type": "string" },
+    "embed": { "type": "object", "properties": { "route": { "type": "string" } } },
+    "view": { "$ref": "view.schema.json" }
+  }
+}

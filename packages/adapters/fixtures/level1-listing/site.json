@@ -1,0 +1,19 @@
+{
+  "name": "level1-listing",
+  "path": "/xr.html",
+  "hook": "__diazoma",
+  "eventsPath": "/api/events",
+  "feedPath": "/listing",
+  "feed": {
+    "cursorParam": "cursor",
+    "nextKey": "next",
+    "itemsKey": "items"
+  },
+  "selectors": {
+    "introRoot": "#diazoma-intro",
+    "introCard": "#diazoma-intro-card",
+    "enter": "#diazoma-enter",
+    "browse": "#diazoma-browse",
+    "stage": "#diazoma"
+  }
+}

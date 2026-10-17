@@ -1,0 +1,182 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://diazoma.app/spec/v1/recipe.schema.json",
+  "title": "Diazoma recipe v1",
+  "description": "A recipe tells RecipeAdapter how to read a site that does not publish the Diazoma site-compatibility spec. It is data: no code, no regex on HTML (regex only on extracted strings).",
+  "type": "object",
+  "required": ["id", "version", "match"],
+  "anyOf": [{ "required": ["list"], "properties": { "list": {} } }, { "required": ["api"], "properties": { "api": {} } }],
+  "properties": {
+    "id": { "type": "string", "minLength": 1, "description": "Site key, usually the domain." },
+    "version": { "type": "integer", "minimum": 1 },
+    "match": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Chrome match patterns. A recipe never applies outside them."
+    },
+    "list": { "$ref": "#/$defs/domSource" },
+    "api": { "$ref": "#/$defs/apiSource" },
+    "media": {
+      "type": "object",
+      "properties": {
+        "needsPrivilegedFetch": { "type": "boolean" },
+        "referer": { "type": "string" },
+        "resize": {
+          "type": "array",
+          "maxItems": 20,
+          "description": "Rules that turn an image URL into smaller copies (spec 3.5).",
+          "items": {
+            "type": "object",
+            "required": ["match"],
+            "properties": {
+              "match": { "type": "string", "minLength": 1, "maxLength": 200, "description": "Plain text the absolute image URL contains (not a regular expression)." },
+              "image": { "type": "string", "description": "The card (about 512 px): replaces the first match, or a template with {url} (the URL percent-encoded) or {url_raw} (as it is)." },
+              "image_focus": { "type": "string", "description": "The focused card (about 1024 px): replaces the first match, or a template with {url} (the URL percent-encoded) or {url_raw} (as it is)." },
+              "image_full": { "type": "string", "description": "What the viewer opens: replaces the first match, or a template with {url} (the URL percent-encoded) or {url_raw} (as it is)." }
+            },
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    "actions": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/action" }
+    },
+    "search": {
+      "type": "object",
+      "required": ["url"],
+      "properties": { "url": { "type": "string", "description": "Template with {query}." } }
+    },
+    "fixtures": { "type": "array", "items": { "type": "string" }, "description": "Paths relative to the recipe file. Every shipped recipe has at least one." },
+    "license": { "type": "string" },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "view": { "$ref": "view.schema.json" }
+  },
+  "$defs": {
+    "domSource": {
+      "type": "object",
+      "required": ["item", "fields"],
+      "properties": {
+        "pages": { "type": "array", "items": { "type": "string" }, "description": "Path globs on which the list applies." },
+        "source": { "const": "dom" },
+        "item": { "type": "string", "minLength": 1, "description": "CSS selector of one item." },
+        "fields": {
+          "type": "object",
+          "required": ["link", "image"],
+          "properties": {
+            "id": { "$ref": "#/$defs/domField" },
+            "link": { "$ref": "#/$defs/domField" },
+            "image": { "$ref": "#/$defs/domField" },
+            "aspect": { "$ref": "#/$defs/domField" },
+            "video": { "$ref": "#/$defs/domField" },
+            "video_type": { "$ref": "#/$defs/domField" },
+            "duration": { "$ref": "#/$defs/domField" },
+            "projection": { "$ref": "#/$defs/domField" },
+            "stereo": { "$ref": "#/$defs/domField" },
+            "media_type": { "$ref": "#/$defs/domField" }
+          },
+          "additionalProperties": { "$ref": "#/$defs/domField" },
+          "description": "Item field name to extraction rule. Dotted names (meta.price) fill nested objects."
+        },
+        "next": {
+          "type": "object",
+          "required": ["sel"],
+          "properties": {
+            "sel": { "type": "string" },
+            "attr": { "type": "string", "default": "href" }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    "domField": {
+      "type": "object",
+      "minProperties": 1,
+      "properties": {
+        "sel": { "type": "string", "description": "CSS selector inside the item; absent means the item itself." },
+        "attr": { "type": "string" },
+        "text": { "type": "boolean" },
+        "const": { "type": ["string", "number", "boolean"] },
+        "srcset": { "const": "largest" },
+        "re": { "type": "string", "maxLength": 200, "description": "Applied to the extracted string only. At most 200 characters. A pattern that can backtrack exponentially (a backreference, a repeated group that holds a quantifier or an alternation) or has more than two unbounded quantifiers is refused at run time, and so is a string longer than 2048 characters: the field is dropped with a warning." },
+        "group": { "type": "integer", "minimum": 0, "default": 1 }
+      },
+      "additionalProperties": false
+    },
+    "apiSource": {
+      "type": "object",
+      "required": ["url", "items", "fields"],
+      "properties": {
+        "source": { "const": "api" },
+        "url": { "type": "string", "minLength": 1, "description": "Template with {page} and {query}. {page} is the page number, or the offset when page.step is set." },
+        "page": {
+          "type": "object",
+          "properties": {
+            "start": { "type": "integer", "description": "First page number. With step: the first offset (default 0)." },
+            "param": { "type": "string", "description": "Query parameter that carries the page number, the offset (step) or the continuation token (next)." },
+            "step": { "type": "integer", "minimum": 1, "description": "Offset paging: the value sent is start + (page-1)*step." },
+            "next": { "type": "string", "pattern": "^\\$", "description": "JSONPath on the response to a continuation token (sent in param) or an absolute URL (fetched as is). No value ends the paging." }
+          },
+          "not": { "required": ["step", "next"], "properties": { "step": {}, "next": {} } },
+          "dependentRequired": { "next": ["param"] },
+          "additionalProperties": false
+        },
+        "items": { "type": "string", "pattern": "^\\$", "description": "JSONPath (RFC 9535) selecting the item array or items." },
+        "fields": {
+          "type": "object",
+          "required": ["link", "image"],
+          "properties": {
+            "link": { "$ref": "#/$defs/apiField" },
+            "image": { "$ref": "#/$defs/apiField" },
+            "aspect": { "$ref": "#/$defs/apiAspectField" },
+            "video": { "$ref": "#/$defs/apiField" },
+            "video_type": { "$ref": "#/$defs/apiField" },
+            "video_sources": { "$ref": "#/$defs/apiField" },
+            "duration": { "$ref": "#/$defs/apiField" },
+            "projection": { "$ref": "#/$defs/apiField" },
+            "stereo": { "$ref": "#/$defs/apiField" },
+            "media_type": { "$ref": "#/$defs/apiField" }
+          },
+          "additionalProperties": { "$ref": "#/$defs/apiField" },
+          "description": "Item field name to a JSONPath evaluated on one item, or a template over the item's own values."
+        }
+      }
+    },
+    "apiField": {
+      "description": "A JSONPath, or { template } where {a.b} placeholders are values of the item (percent-encoded, unless the template is one placeholder).",
+      "oneOf": [
+        { "type": "string", "pattern": "^\\$" },
+        {
+          "type": "object",
+          "required": ["template"],
+          "properties": { "template": { "type": "string", "minLength": 1, "maxLength": 1000 } },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "apiAspectField": {
+      "description": "Like any api field, or { w, h }: JSONPaths of the pixel width and height; aspect is w/h, dropped unless both are positive.",
+      "oneOf": [
+        { "$ref": "#/$defs/apiField" },
+        {
+          "type": "object",
+          "required": ["w", "h"],
+          "properties": { "w": { "type": "string", "pattern": "^\\$" }, "h": { "type": "string", "pattern": "^\\$" } },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "action": {
+      "type": "object",
+      "required": ["method", "url"],
+      "properties": {
+        "method": { "enum": ["GET", "POST", "PUT", "PATCH", "DELETE"] },
+        "url": { "type": "string" },
+        "body": { "type": "object" },
+        "auth": { "enum": ["none", "session"] }
+      }
+    }
+  }
+}

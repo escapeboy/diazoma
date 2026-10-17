@@ -1,0 +1,24 @@
+{
+  "id": "prints.example",
+  "version": 1,
+  "match": ["https://prints.example/*", "https://www.prints.example/*"],
+  "list": {
+    "pages": ["/plates*"],
+    "source": "dom",
+    "item": "li.plate",
+    "fields": {
+      "id": { "attr": "data-id" },
+      "link": { "sel": "a.plate__link", "attr": "href" },
+      "image": { "sel": "img.plate__img", "attr": "src", "srcset": "largest" },
+      "title": { "sel": "h3", "text": true },
+      "aspect": { "const": 1.333 },
+      "meta.price": { "sel": ".price", "text": true },
+      "meta.year": { "sel": ".caption", "text": true, "re": "(\\d{4})", "group": 1 }
+    },
+    "next": { "sel": "a[rel=next]", "attr": "href" }
+  },
+  "search": { "url": "https://prints.example/plates?q={query}" },
+  "fixtures": ["botanical-dom/listing.html"],
+  "license": "CC0-1.0",
+  "tags": ["listings", "prints"]
+}

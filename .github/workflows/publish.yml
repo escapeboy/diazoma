@@ -1,0 +1,38 @@
+name: publish
+
+# Push a tag v<version> after the packages' versions are bumped. Needs the repository secret NPM_TOKEN
+# (an npm automation token of the "diazoma" npm organization).
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+  id-token: write # npm provenance
+
+jobs:
+  npm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+      # pnpm publish skips versions already on npm, so a tag without a version bump would pass and publish nothing.
+      - name: tag matches every package version
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          for p in packages/*/package.json; do
+            v="$(node -p "require('./$p').version")"
+            [ "$v" = "$tag" ] || { echo "$p is $v, tag is $tag"; exit 1; }
+          done
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm -r build
+      - run: pnpm -r test
+      - run: pnpm -r publish --access public --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: 'true'

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Решения на общинския съвет</title>
+    <link>https://council.example/</link>
+    <item>
+      <title>Решение № 41 за бюджета на общината</title>
+      <link>https://council.example/resheniya/41</link>
+      <guid>41</guid>
+      <dc:creator>Общински съвет</dc:creator>
+      <pubDate>Fri, 09 Oct 2026 10:30:00 +0000</pubDate>
+      <description><![CDATA[<p>Общинският съвет <b>приема</b> бюджета&nbsp;за 2027 г.</p>
+<p>Приложение: таблици.</p>]]></description>
+    </item>
+    <item>
+      <title>Решение № 42</title>
+      <link>https://council.example/resheniya/42</link>
+      <guid>42</guid>
+      <pubDate>not a date</pubDate>
+    </item>
+    <item>
+      <title>Решение с картинка</title>
+      <link>https://council.example/resheniya/43</link>
+      <guid>43</guid>
+      <enclosure url="https://council.example/43.jpg" type="image/jpeg" length="1"/>
+      <description>Има снимка.</description>
+    </item>
+  </channel>
+</rss>
