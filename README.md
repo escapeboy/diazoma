@@ -13,8 +13,11 @@ Website and documentation: https://diazoma.app
 | `packages/adapters` | `@diazoma/adapters`: feed, page and recipe adapters, and `diazoma-embed.js` | Apache-2.0 |
 | `packages/spec` | `@diazoma/spec`: the site compatibility spec v1, JSON Schemas and the `diazoma-spec` validator | text CC-BY-4.0, code and schemas Apache-2.0 |
 | `packages/recipe-schema` | `@diazoma/recipe-schema`: JSON Schemas for recipes and views | Apache-2.0 |
-| `plugins/wordpress` | WordPress plugin "Diazoma Wall" | GPL-2.0-or-later |
-| `plugins/laravel` | `diazoma/laravel` (also at github.com/escapeboy/diazoma-laravel for Packagist) | Apache-2.0 |
+
+The plugins have their own repositories:
+
+- WordPress plugin "Diazoma Wall": https://github.com/escapeboy/diazoma-wordpress (GPL-2.0-or-later)
+- Laravel package `diazoma/laravel`: https://github.com/escapeboy/diazoma-laravel (Apache-2.0)
 
 The Diazoma Browser for Meta Quest is a separate project: github.com/escapeboy/wolvic, branch `diazoma` (MPL-2.0).
 The Chrome extension, the marketplace and the web app are not open source.
@@ -36,8 +39,6 @@ pnpm install
 pnpm build
 pnpm test
 ```
-
-The plugins use Composer: `composer install && composer test` inside `plugins/wordpress` or `plugins/laravel`.
 
 ## Contributing
 
